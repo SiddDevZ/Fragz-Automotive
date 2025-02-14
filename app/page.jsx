@@ -6,7 +6,7 @@ import Reviews from "../components/Reviews/Reviews";
 export default function Home() {
   return (
     <>
-      <div className="min-h-screen mb-96 w-full bg-[#ffffff] relative">
+      <div className="min-h-screen w-full bg-[#ffffff] relative">
         <Navbar />
 
         {/* Hero Section */}
@@ -215,7 +215,7 @@ export default function Home() {
             </div>
 
             {/* Stats ribbon */}
-            <div className="mt-16 bg-gradient-to-r from-[#f6a400d5] to-[#f6a400d5] rounded-2xl p-8 shadow-2xl">
+            <div className="mt-16 border border-[#f6a400d5] rounded-2xl p-8 shadow-2xl">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 {[
                   { number: "15+", label: "Legal Designs" },
@@ -223,7 +223,7 @@ export default function Home() {
                   { number: "4.9★", label: "Customer Rating" },
                   { number: "98%", label: "Same-Day Dispatch" },
                 ].map((stat, index) => (
-                  <div key={index} className="text-white">
+                  <div key={index} className="text-[#cc8800fe]">
                     <div className="text-4xl font-bold mb-2">{stat.number}</div>
                     <div className="text-sm opacity-90">{stat.label}</div>
                   </div>
@@ -245,6 +245,165 @@ export default function Home() {
           </h4>
           <Reviews />
         </section>
+
+        <section className="py-16 mt-5 px-4 sm:px-6 lg:px-8">
+          <div
+            className="max-w-[77rem] mx-auto bg-[#fdfdfd] border rounded-2xl p-8 md:p-16 hover:shadow-sm transition-shadow duration-300"
+            style={{
+              background:
+                "radial-gradient(circle, #D6D5D5 1px, transparent 1px)",
+              backgroundSize: "20px 20px",
+              padding: "20px",
+            }}
+          >
+            <div className="text-center space-y-8 py-8">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                Ready to Transform Your Vehicle?
+                <br />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-500 to-amber-700 mt-2.5 block">
+                  Let F.A.R Be Your Guide
+                </span>
+              </h2>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button className="bg-amber-500 hover:bg-[#ffa50a] text-white px-6 py-3.5 rounded-full font-bold transition-all transform hover:scale-[1.025] ease-in-out shadow-md">
+                  Design Your Plate Now
+                  <i className="ri-arrow-right-line ml-2 animate-pulse" />
+                </button>
+
+                <p className="text-gray-600 sm:ml-4 mt-2 sm:mt-0">
+                  or browse our
+                  <a
+                    href="#gallery"
+                    className="text-amber-600 hover:text-amber-700 font-semibold ml-1"
+                  >
+                    150+ premium designs →
+                  </a>
+                </p>
+              </div>
+
+              <div className="pt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div className="flex flex-col items-center p-4 rounded-xl">
+                  <i className="ri-medal-line text-3xl text-amber-600 mb-2" />
+                  <span className="font-semibold">DVLA Approved</span>
+                </div>
+                <div className="flex flex-col items-center p-4 rounded-xl">
+                  <i className="ri-truck-line text-3xl text-amber-600 mb-2" />
+                  <span className="font-semibold">Same-Day Dispatch</span>
+                </div>
+                <div className="flex flex-col items-center p-4 rounded-xl">
+                  <i className="ri-shield-check-line text-3xl text-amber-600 mb-2" />
+                  <span className="font-semibold">1 Year Warranty</span>
+                </div>
+                <div className="flex flex-col items-center p-4 rounded-xl">
+                  <i className="ri-star-smile-line text-3xl text-amber-600 mb-2" />
+                  <span className="font-semibold">4.9/5 Reviews</span>
+                </div>
+              </div>
+
+              <p className="text-sm text-gray-500 mt-8">
+                Trusted by 15,000+ drivers across the UK • 24/7 Customer Support
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <footer className="bg-[#181818] text-white mt-24">
+          <div className="max-w-[77rem] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 border-b border-gray-800 pb-12">
+              {/* Contact Info */}
+              <div className="space-y-4">
+                <h3 className="text-amber-400 font-bold text-lg mb-4">
+                  F.A.R Plates
+                </h3>
+                <div className="flex items-start space-x-3">
+                  <i className="ri-map-pin-line text-amber-400 mt-1"></i>
+                  <p className="text-gray-300">
+                    123 Automotive Way
+                    <br />
+                    Birmingham, B1 1AB
+                    <br />
+                    United Kingdom
+                  </p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <i className="ri-phone-line text-amber-400"></i>
+                  <a
+                    href="tel:+441212345678"
+                    className="text-gray-300 hover:text-amber-400"
+                  >
+                    +44 121 234 5678
+                  </a>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <i className="ri-mail-line text-amber-400"></i>
+                  <a
+                    href="mailto:hello@farplates.com"
+                    className="text-gray-300 hover:text-amber-400"
+                  >
+                    hello@farplates.com
+                  </a>
+                </div>
+              </div>
+
+              {/* Quick Links */}
+              <div className="md:col-span-2">
+                <h3 className="text-amber-400 font-bold text-lg mb-4">
+                  Quick Links
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    "Home",
+                    "About",
+                    "Services",
+                    "FAQ",
+                    "Contact",
+                    "Legal Info",
+                  ].map((link) => (
+                    <a
+                      key={link}
+                      href={`#${link.toLowerCase().replace(" ", "-")}`}
+                      className="text-gray-300 hover:text-amber-400 transition-colors"
+                    >
+                      {link}
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              {/* Social Media */}
+              <div>
+                <h3 className="text-amber-400 font-bold text-lg mb-4">
+                  Follow Us
+                </h3>
+                <div className="flex space-x-4">
+                  {[
+                    { icon: "ri-instagram-line", link: "#" },
+                    { icon: "ri-facebook-circle-line", link: "#" },
+                    { icon: "ri-twitter-x-line", link: "#" },
+                  ].map((social, index) => (
+                    <a
+                      key={index}
+                      href={social.link}
+                      className="text-2xl text-gray-300 hover:text-amber-400 transition-colors"
+                    >
+                      <i className={social.icon} />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Copyright */}
+            <div className="pt-8 text-center md:text-left">
+              <p className="text-gray-400 text-sm">
+                © {new Date().getFullYear()} F.A.R Plates. All rights reserved.
+                <br />
+                DVLA Registered | BS AU 145e Compliant
+              </p>
+            </div>
+          </div>
+        </footer>
       </div>
 
       <style jsx global>{`

@@ -42,7 +42,7 @@ const NavBar = () => {
       <nav
         className={`fixed z-50 top-0 left-0 right-0 transition-all duration-300 ${
           show ? 'translate-y-0' : '-translate-y-full'
-        } ${scrolled ? 'backdrop-blur-lg bg-white/10' : ''} w-full`}
+        } ${scrolled ? 'backdrop-blur-lg bg-[#5a5a5a71]' : ''} w-full`}
       >
         <div className="flex max-w-[77rem] mx-auto items-center justify-between pt-6 pb-4 sm:px-16 xs:px-12 xss:px-7">
           <h1 className="text-[#ebebeb] text-3xl font-inter font-semibold transition-all duration-300 hover:scale-105">
