@@ -1,11 +1,12 @@
 "use client";
 import Navbar from "../components/Navbar/Navbar";
 import Featured from "../components/Featured/Featured";
+import Reviews from "../components/Reviews/Reviews";
 
 export default function Home() {
   return (
     <>
-      <div className="min-h-[400vh] w-full bg-[#ffffff] relative">
+      <div className="min-h-screen mb-96 w-full bg-[#ffffff] relative">
         <Navbar />
 
         {/* Hero Section */}
@@ -230,6 +231,19 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </section>
+
+        <section
+          // ref={sectionRef}
+          className="flex flex-col w-[100%] max-w-[77rem] mx-auto mt-[3.5rem] relative"
+        >
+          <h2 className="text-center font-inter font-medium text-[#090909] sm:text-5xl xs:text-4xl xss:text-4xl leading-10 relative xs:w-full xss:w-[97%] z-10">
+            Loved by people around the world
+          </h2>
+          <h4 className="text-center font-inter font-medium text-[#393939] sm:text-base xss:text-sm sm:w-[60%] mt-3 xss:w-[90%] mx-auto relative z-10">
+            Transform your vehicle's look with our premium number plates.
+          </h4>
+          <Reviews />
         </section>
       </div>
 
