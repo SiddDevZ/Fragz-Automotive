@@ -20,8 +20,8 @@ export async function generateStaticParams() {
   return paramsArray
 }
 
-export default function ProductPage({ params }) {
-  const { categorySlug, productSlug } = params
+export default async function ProductPage({ params }) {
+  const { categorySlug, productSlug } = await params
   const category = categories.find((c) => c.slug === categorySlug)
   if (!category) {
     notFound()
@@ -52,22 +52,24 @@ export default function ProductPage({ params }) {
             </div>
           </div>
 
-          <div className="md:w-1/2 px-2 sm:px-4 md:px-6">
-            <div className="border bg-[#fefefe] p-4 sm:p-6 rounded-lg shadow-sm">
-              <p className='text-xs sm:text-sm font-pop text-[#2b2b2b] uppercase tracking-wider mb-1 sm:mb-2'>Fragz Custom Number Plates</p>
-              <h2 className="font-inter text-2xl sm:text-3xl md:text-[2.55rem] leading-tight font-bold text-[#181818] mb-2 sm:mb-4">{product.name}</h2>
-              <div className="flex flex-row items-center justify-between mb-6">
-                <p className="text-xl sm:text-3xl text-[#2f2f2f] font-inter font-semibold mb-2 sm:mb-0">
+          <div className="md:w-1/2 px-2 sm:px-4 md:px-8">
+            <div className="border bg-[#fefefe] p-4 sm:py-6 sm:px-9 rounded-lg shadow-sm">
+              <p className='text-xs sm:text-sm font-pop text-[#2b2b2b] uppercase tracking-wider mb-2 sm:mb-3'>Fragz Custom Number Plates</p>
+              <h2 className="font-inter text-3xl sm:text-3xl md:text-[2.55rem] leading-tight font-bold text-[#181818] mb-2 sm:mb-3">{product.name}</h2>
+              <h4 className='font-inter sm:text-base text-sm mb-4 text-[#373737]'>{product.description}</h4>
+              <div className="flex flex-row items-center justify-between mb-4">
+                <p className="text-2xl tracking-wide sm:text-3xl text-[#2f2f2f] font-inter font-semibold mb-2 sm:mb-0">
                   {product.price}
                 </p>
                 <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full inline-block">In Stock</span>
               </div>
-              <div className="flex items-center text-sm text-gray-600 mb-6">
+              <div className="flex items-center text-sm text-gray-600 mb-4">
                 <svg className="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
                 </svg>
-                Tax Included
+                Tax Included. Shipping calculated at checkout.
               </div>
+              {/* <button className='rounded-full px-4 py-2'>Add</button> */}
               <div className="border-t border-gray-200 pt-4 sm:pt-6">
                 <ProductForm product={product} />
               </div>
