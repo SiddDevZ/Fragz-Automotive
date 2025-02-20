@@ -2,8 +2,24 @@
 import Navbar from "../components/Navbar/Navbar";
 import Featured from "../components/Featured/Featured";
 import Reviews from "../components/Reviews/Reviews";
+import { useSearchParams } from "next/navigation";
+import { useRef, useState, useEffect } from "react";
+import Footer from '../components/Footer/Footer'
 
 export default function Home() {
+  const reviewsRef = useRef(null);
+  const searchParams = useSearchParams();
+
+  const scrollToreviews = () => {
+    reviewsRef.current?.scrollIntoView({ behavior: "smooth" });
+    window.history.pushState({}, "", "/");
+  };
+
+  useEffect(() => {
+    if (searchParams.get("scroll") === "reviews") {
+      setTimeout(scrollToreviews, 100);
+    }
+  }, [searchParams]);
   return (
     <>
       <div className="min-h-screen w-full bg-[#ffffff] relative">
@@ -234,11 +250,11 @@ export default function Home() {
         </section>
 
         <section
-          // ref={sectionRef}
+          ref={reviewsRef}
           className="flex flex-col w-[100%] max-w-[77rem] mx-auto mt-[3.5rem] relative"
         >
           <h2 className="text-center font-inter font-medium text-[#090909] sm:text-5xl xs:text-4xl xss:text-4xl leading-10 relative xs:w-full xss:w-[97%] z-10">
-            Loved by people around the world
+            UK's favourite number plate brand
           </h2>
           <h4 className="text-center font-inter font-medium text-[#393939] sm:text-base xss:text-sm sm:w-[60%] mt-3 xss:w-[90%] mx-auto relative z-10">
             Transform your vehicle's look with our premium number plates.
@@ -261,7 +277,7 @@ export default function Home() {
                 Ready to Transform Your Vehicle?
                 <br />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-500 to-amber-700 mt-2.5 block">
-                  Let F.A.R Be Your Guide
+                  We'll Take You F.A.R
                 </span>
               </h2>
 
@@ -308,102 +324,7 @@ export default function Home() {
           </div>
         </section>
 
-        <footer className="bg-[#181818] text-white mt-24">
-          <div className="max-w-[77rem] mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 border-b border-gray-800 pb-12">
-              {/* Contact Info */}
-              <div className="space-y-4">
-                <h3 className="text-amber-400 font-bold text-lg mb-4">
-                  F.A.R Plates
-                </h3>
-                <div className="flex items-start space-x-3">
-                  <i className="ri-map-pin-line text-amber-400 mt-1"></i>
-                  <p className="text-gray-300">
-                    123 Automotive Way
-                    <br />
-                    Birmingham, B1 1AB
-                    <br />
-                    United Kingdom
-                  </p>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <i className="ri-phone-line text-amber-400"></i>
-                  <a
-                    href="tel:+441212345678"
-                    className="text-gray-300 hover:text-amber-400"
-                  >
-                    +44 121 234 5678
-                  </a>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <i className="ri-mail-line text-amber-400"></i>
-                  <a
-                    href="mailto:hello@farplates.com"
-                    className="text-gray-300 hover:text-amber-400"
-                  >
-                    hello@farplates.com
-                  </a>
-                </div>
-              </div>
-
-              {/* Quick Links */}
-              <div className="md:col-span-2">
-                <h3 className="text-amber-400 font-bold text-lg mb-4">
-                  Quick Links
-                </h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {[
-                    "Home",
-                    "About",
-                    "Services",
-                    "FAQ",
-                    "Contact",
-                    "Legal Info",
-                  ].map((link) => (
-                    <a
-                      key={link}
-                      href={`#${link.toLowerCase().replace(" ", "-")}`}
-                      className="text-gray-300 hover:text-amber-400 transition-colors"
-                    >
-                      {link}
-                    </a>
-                  ))}
-                </div>
-              </div>
-
-              {/* Social Media */}
-              <div>
-                <h3 className="text-amber-400 font-bold text-lg mb-4">
-                  Follow Us
-                </h3>
-                <div className="flex space-x-4">
-                  {[
-                    { icon: "ri-instagram-line", link: "#" },
-                    { icon: "ri-facebook-circle-line", link: "#" },
-                    { icon: "ri-twitter-x-line", link: "#" },
-                  ].map((social, index) => (
-                    <a
-                      key={index}
-                      href={social.link}
-                      className="text-2xl text-gray-300 hover:text-amber-400 transition-colors"
-                    >
-                      <i className={social.icon} />
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Copyright */}
-            <div className="pt-8 text-center md:text-left">
-              <p className="text-gray-400 text-sm">
-                © {new Date().getFullYear()} F.A.R Plates. All rights reserved.
-                <br />
-                DVLA Registered | BS AU 145e Compliant
-              </p>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
 
       <style jsx global>{`
