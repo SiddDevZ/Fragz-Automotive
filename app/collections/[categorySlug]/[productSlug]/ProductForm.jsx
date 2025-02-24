@@ -20,7 +20,7 @@ const ImageUpload = ({ name, onFileSelect, error }) => {
     <div>
       <div
         {...getRootProps()}
-        className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 ${
+        className={`mt-1 cursor-pointer flex justify-center px-6 pt-5 pb-6 border-2 ${
           error ? "border-red-500" : "border-gray-300"
         } border-dashed rounded-lg hover:border-amber-500 transition-colors duration-300`}
       >

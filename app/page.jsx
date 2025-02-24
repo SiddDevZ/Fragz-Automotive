@@ -4,9 +4,12 @@ import Featured from "../components/Featured/Featured";
 import Reviews from "../components/Reviews/Reviews";
 import { useSearchParams } from "next/navigation";
 import { useRef, useState, useEffect } from "react";
-import Footer from '../components/Footer/Footer'
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Footer from "../components/Footer/Footer";
 
 export default function Home() {
+  const router = useRouter();
   const reviewsRef = useRef(null);
   const searchParams = useSearchParams();
 
@@ -14,6 +17,10 @@ export default function Home() {
     reviewsRef.current?.scrollIntoView({ behavior: "smooth" });
     window.history.pushState({}, "", "/");
   };
+
+  const goToCollections = () => {
+    router.push("/collections");
+  }
 
   useEffect(() => {
     if (searchParams.get("scroll") === "reviews") {
@@ -29,21 +36,24 @@ export default function Home() {
         <div className="relative h-[90vh] overflow-hidden">
           {/* Background Image with Overlay */}
           <div className="absolute inset-0 z-0">
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1617286114183-3de6d981bcd7"
               alt="Premium Number Plates"
-              className="w-full h-full object-cover object-center"
+              layout="fill"
+              objectFit="cover"
+              objectPosition="center"
+              priority
             />
             <div className="absolute inset-0 bg-black/50" />
           </div>
 
           {/* Content */}
-          <div className="relative z-10 mt-14 h-full flex items-center justify-center px-4 sm:px-6 lg:px-8">
+          <div className="relative animate-in z-10 mt-14 h-full flex items-center justify-center px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-4xl transform transition-all duration-500">
               {/* Trustpilot Badge */}
 
               {/* Main Heading */}
-              <h1 className="text-[1.7rem] leading-9 xs:text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold font-inter text-white tracking-tight animate-fade-in-up">
+              <h1 className="text-[1.7rem] leading-9 xs:text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold font-inter text-white tracking-tight">
                 Premium Number Plates <br />
                 <span className="text-amber-400"> Crafted to Perfection</span>
               </h1>
@@ -58,7 +68,7 @@ export default function Home() {
               {/* CTA Buttons */}
               <div className="space-x-2 xs:space-x-3 sm:space-x-4 md:mt-6 sm:mt-5 xss:mt-3">
                 <button
-                  // onClick={() => redirect()}
+                  onClick={() => goToCollections()}
                   className="px-[4.3vw] py-[1.9vw] xss:py-[0.65rem] xss:px-[1.65rem] xs:px-[4.3vw] xs:py-[1.6vw] sm:px-[2.1rem] sm:py-[0.7rem] md:px-[2.6rem] md:py-[0.75rem] lg:px-[2.25rem] lg:py-[0.65rem] bg-[#bd981d] transition-all hover:scale-[1.03] hover:bg-[#c8a01d] text-white text-[3.8vw] xs:text-[3vw] sm:text-[1rem] md:text-[1.2rem] font-pop font-medium rounded-full"
                 >
                   Design Your Plate
@@ -136,7 +146,7 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <button className="bg-[#000000] mt-8 text-white font-bold py-3 px-6 rounded-full hover:bg-[#37321f] hover:shadow-lg hover:scale-105 transition ease-out duration-300">
+            <button onClick={() => goToCollections()} className="bg-[#000000] mt-8 text-white font-bold py-3 px-6 rounded-full hover:bg-[#37321f] hover:shadow-lg hover:scale-105 transition ease-out duration-300">
               DISCOVER OUR RANGE
               <i className="ri-arrow-right-line ml-2"></i>
             </button>
@@ -282,7 +292,7 @@ export default function Home() {
               </h2>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <button className="bg-amber-500 hover:bg-[#ffa50a] text-white px-6 py-3.5 rounded-full font-bold transition-all transform hover:scale-[1.025] ease-in-out shadow-md">
+                <button onClick={() => goToCollections()} className="bg-amber-500 hover:bg-[#ffa50a] text-white px-6 py-3.5 rounded-full font-bold transition-all transform hover:scale-[1.025] ease-in-out shadow-md">
                   Design Your Plate Now
                   <i className="ri-arrow-right-line ml-2 animate-pulse" />
                 </button>
@@ -290,8 +300,9 @@ export default function Home() {
                 <p className="text-gray-600 sm:ml-4 mt-2 sm:mt-0">
                   or browse our
                   <a
-                    href="#gallery"
-                    className="text-amber-600 hover:text-amber-700 font-semibold ml-1"
+                    // href="#gallery"
+                    onClick={() => goToCollections()}
+                    className="text-amber-600 cursor-pointer hover:text-amber-700 font-semibold ml-2"
                   >
                     150+ premium designs →
                   </a>

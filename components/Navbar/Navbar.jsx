@@ -56,7 +56,7 @@ const NavBar = ({ dark }) => {
         } ${scrolled ? (dark ? 'backdrop-blur-lg bg-[#f5f5f5]' : 'backdrop-blur-lg bg-[#5a5a5a71]') : ''} w-full`}
       >
         <div className="flex max-w-[77rem] mx-auto items-center justify-between pt-6 pb-4 sm:px-16 xs:px-12 xss:px-7">
-          <h1 className={`text-3xl font-inter font-semibold transition-all duration-300 hover:scale-105 ${dark ? 'text-[#1d1d1d]' : 'text-[#ebebeb]'}`}>
+          <h1 onClick={() => router.push("/")} className={`cursor-pointer text-3xl font-inter font-semibold transition-all duration-300 hover:scale-105 ${dark ? 'text-[#1d1d1d]' : 'text-[#ebebeb]'}`}>
             F.A.R
           </h1>
 

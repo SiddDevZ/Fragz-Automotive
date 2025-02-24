@@ -72,26 +72,30 @@ const Featured = () => {
   };
 
   return (
-    <section className="py-24 mt-5 px-4 sm:px-6 lg:px-8">
+    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
       <div className="max-w-7xl mx-auto relative">
         {/* Header and Controls */}
-        <div className="flex justify-between items-center mb-8 px-4">
+        <div className="flex justify-between items-center mb-8 px-2">
           <div>
-            <h3 className="text-3xl font-bold font-inter">Premium Collections</h3>
-            <p className="text-gray-600 mt-2">Explore our exclusive range</p>
+            <h2 className="text-3xl font-bold font-inter text-gray-900 tracking-tight">
+              Premium Collections
+            </h2>
+            <p className="text-gray-500 mt-1.5 text-lg">
+              Curated excellence for your vehicle
+            </p>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             <button 
               onClick={() => scrollRef.current.scrollBy({ left: -300, behavior: 'smooth' })}
-              className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all w-12 h-12 flex items-center justify-center"
+              className="p-2.5 rounded-full bg-white border border-[#7e7e7e] shadow-sm hover:shadow-md transition-all w-11 h-11 flex items-center justify-center hover:bg-gray-50"
             >
-              <i className="ri-arrow-left-s-line text-2xl text-gray-800" />
+              <i className="ri-arrow-left-s-line text-xl text-gray-700" />
             </button>
             <button 
               onClick={() => scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' })}
-              className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all w-12 h-12 flex items-center justify-center"
+              className="p-2.5 rounded-full bg-white border border-[#7e7e7e] shadow-sm hover:shadow-md transition-all w-11 h-11 flex items-center justify-center hover:bg-gray-50"
             >
-              <i className="ri-arrow-right-s-line text-2xl text-gray-800" />
+              <i className="ri-arrow-right-s-line text-xl text-gray-700" />
             </button>
           </div>
         </div>
@@ -99,7 +103,7 @@ const Featured = () => {
         {/* Carousel Items */}
         <div 
           ref={scrollRef}
-          className="flex overflow-x-auto scrollbar-hide scroll-smooth gap-6 pb-8"
+          className="flex overflow-x-auto scrollbar-hide scroll-smooth gap-8 pb-10 px-2"
           onMouseDown={handleMouseDown}
           onMouseLeave={handleMouseLeave}
           onMouseUp={handleMouseUp}
@@ -108,40 +112,42 @@ const Featured = () => {
           {products.map((product, index) => (
             <div 
               key={index}
-              className="flex-shrink-0 group w-80 relative bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300"
+              className="flex-shrink-0 group w-72 relative bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100"
             >
               <div className="aspect-square overflow-hidden relative rounded-t-xl">
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full unselectable h-full object-cover transform transition-transform duration-300 group-hover:scale-110"
+                  className="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105"
                   draggable="false"
                   onDragStart={(e) => e.preventDefault()}
                 />
                 {product.salePrice && (
-                  <span className="absolute unselectable top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    {Math.round(((product.price - product.salePrice)/product.price)*100)}% OFF
+                  <span className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1.5 rounded-full text-xs font-medium tracking-wide">
+                    {Math.round(((product.price - product.salePrice)/product.price)*100)}% Off
                   </span>
                 )}
               </div>
 
-              <div className="p-6">
-                <h4 className="font-inter text-xl font-semibold mb-2 unselectable truncate">{product.name}</h4>
-                <div className="flex gap-3 items-baseline">
+              <div className="p-5">
+                <h4 className="font-inter text-lg font-semibold mb-3 text-gray-900 truncate">
+                  {product.name}
+                </h4>
+                <div className="flex gap-2 items-baseline mb-4">
                   {product.salePrice ? (
                     <>
-                      <span className="text-2xl font-bold text-red-600 unselectable">
+                      <span className="text-xl font-bold text-red-600">
                         £{product.salePrice}
                       </span>
-                      <span className="text-gray-400 line-through unselectable">£{product.price}</span>
+                      <span className="text-gray-400 line-through text-sm">£{product.price}</span>
                     </>
                   ) : (
-                    <span className="text-2xl unselectable font-bold text-gray-900">
+                    <span className="text-xl font-bold text-gray-900">
                       £{product.price}
                     </span>
                   )}
                 </div>
-                <button className="mt-4 unselectable w-full hover:scale-[1.03] transition-all ease-in-out py-3 bg-black text-white rounded-lg hover:bg-[#1e1e1e] duration-300 font-medium">
+                <button className="w-full py-2.5 bg-black hover:bg-gray-900 text-white rounded-lg transition-all duration-200 font-medium text-sm tracking-wide transform hover:scale-[1.02] active:scale-95">
                   Get Yours Now
                 </button>
               </div>

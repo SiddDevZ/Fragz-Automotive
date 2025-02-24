@@ -23,7 +23,7 @@ export default function CategoryPage({ params }) {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white animate-in">
       <Navbar />
       {/* Category Banner */}
       <header className="relative">
