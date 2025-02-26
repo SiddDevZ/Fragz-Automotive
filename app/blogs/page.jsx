@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
-import blogData from "../blogs";
+import blogData from "../blogs.js";
 import Link from "next/link";
 
 const page = () => {

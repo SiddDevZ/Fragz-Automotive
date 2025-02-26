@@ -1,9 +1,9 @@
 import React from 'react'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import Navbar from '../../../../components/Navbar/Navbar'
-import Footer from '../../../../components/Footer/Footer'
-import ProductForm from './ProductForm'
+import Navbar from '../../../../components/Navbar/Navbar.jsx'
+import Footer from '../../../../components/Footer/Footer.jsx'
+import ProductForm from './ProductForm.jsx'
 import { categories } from '../../../data.js'  // Adjust the path as needed
 
 // Pre-generate all product routes based on categorySlug and productSlug

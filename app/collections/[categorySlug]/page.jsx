@@ -1,17 +1,14 @@
-'use client'
-import React, { use } from 'react'
+import React from 'react'
 import Navbar from '../../../components/Navbar/Navbar'
 import Footer from '../../../components/Footer/Footer'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { categories } from '../../data.js'  // Ensure the data file is located at this path
+import { categories } from '../../data.js'
 
-export default function CategoryPage({ params }) {
-  // Unwrap the params promise using React's use() hook before accessing its properties.
-  const { categorySlug } = use(params)
-  const router = useRouter()
-
+export default async function CategoryPage({ params }) {
+  // In server components, params is directly available as a prop
+  const { categorySlug } = await params;
+  
   const category = categories.find(c => c.slug === categorySlug)
 
   if (!category) {

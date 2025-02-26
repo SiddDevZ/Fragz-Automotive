@@ -1,11 +1,11 @@
 import React from "react";
-import NavBar from "../../../components/Navbar/Navbar";
-import blogs from "../../blogs";
+import NavBar from "../../../components/Navbar/Navbar.jsx";
+import blogs from "../../blogs.js";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import readingTime from "reading-time";
 import { notFound } from "next/navigation";
-import { Particles } from "../../../components/ui/particles";
+import { Particles } from "../../../components/ui/particles.jsx";
 
 // Custom renderers for Markdown elements
 const MarkdownComponents = {
@@ -56,6 +56,7 @@ const MarkdownComponents = {
 export default async function BlogPage({ params }) {
   // Await the params object
   const { blogsSlug } = await params;
+  console.log('Blog slug:', blogsSlug);
 
   const blog = blogs.find(
     (b) => b.title.toLowerCase().replace(/ /g, "-") === blogsSlug

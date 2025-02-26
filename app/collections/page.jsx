@@ -1,13 +1,14 @@
-'use client'
+// 'use client'
 import React from 'react'
-import Navbar from '../../components/Navbar/Navbar'
-import { useRouter } from 'next/navigation'
-import Footer from '../../components/Footer/Footer'
+import Navbar from '../../components/Navbar/Navbar.jsx'
+// import { useRouter } from 'next/navigation'
+import Footer from '../../components/Footer/Footer.jsx'
+import Link from 'next/link.js'
 import Image from 'next/image'
 import { categories } from '../data.js' 
 
 const CollectionsPage = () => {
-  const router = useRouter()
+  // const router = useRouter()
   
   return (
     <div className='min-h-screen w-full bg-white'>
@@ -20,9 +21,10 @@ const CollectionsPage = () => {
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
           {categories.map((category, index) => (
-            <div 
+            <Link
               key={index}
-              onClick={() => router.push(category.redirect)}
+              href={`${category.redirect}`}
+              // onClick={() => router.push(category.redirect)}
               className='group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl cursor-pointer transition-all duration-300'
             >
               <div className='relative h-80'>
@@ -46,7 +48,7 @@ const CollectionsPage = () => {
                   {category.count}
                 </p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </main>

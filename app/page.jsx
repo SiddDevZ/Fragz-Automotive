@@ -3,15 +3,26 @@ import Navbar from "../components/Navbar/Navbar";
 import Featured from "../components/Featured/Featured";
 import Reviews from "../components/Reviews/Reviews";
 import { useSearchParams } from "next/navigation";
-import { useRef, useState, useEffect } from "react";
+import { useRef, Suspense, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Footer from "../components/Footer/Footer";
 
+function SearchParamsHandler({ onReviewsScroll }) {
+  const searchParams = useSearchParams();
+  
+  useEffect(() => {
+    if (searchParams.get("scroll") === "reviews") {
+      setTimeout(onReviewsScroll, 100);
+    }
+  }, [searchParams, onReviewsScroll]);
+  
+  return null; // This component doesn't render anything
+}
+
 export default function Home() {
   const router = useRouter();
   const reviewsRef = useRef(null);
-  const searchParams = useSearchParams();
 
   const scrollToreviews = () => {
     reviewsRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -21,16 +32,14 @@ export default function Home() {
   const goToCollections = () => {
     router.push("/collections");
   }
-
-  useEffect(() => {
-    if (searchParams.get("scroll") === "reviews") {
-      setTimeout(scrollToreviews, 100);
-    }
-  }, [searchParams]);
   return (
     <>
       <div className="min-h-screen w-full bg-[#ffffff] relative">
         <Navbar />
+
+        <Suspense fallback={null}>
+          <SearchParamsHandler onReviewsScroll={scrollToreviews} />
+        </Suspense>
 
         {/* Hero Section */}
         <div className="relative h-[90vh] overflow-hidden">
