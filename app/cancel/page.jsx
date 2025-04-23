@@ -1,12 +1,16 @@
 'use client'
 import { useEffect } from 'react'
 import Link from 'next/link'
+import config from '../../config.json'
+
+// Get the API URL from the config file
+const apiUrl = config[config.environment].apiBaseUrl;
 
 export default function CheckoutCancel() {
   useEffect(() => {
     console.log('Checkout was canceled by the user')
 
-    fetch('http://localhost:3001/api/create-checkout-session/cancel')
+    fetch(`${apiUrl}/api/create-checkout-session/cancel`)
       .then(res => res.text())
       .then(text => {
         try {

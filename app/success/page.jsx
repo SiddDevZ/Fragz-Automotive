@@ -3,6 +3,10 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import config from '../../config.json';
+
+// Get the API URL from the config file
+const apiUrl = config[config.environment].apiBaseUrl;
 
 export default function CheckoutSuccess() {
   const searchParams = useSearchParams();
@@ -33,8 +37,8 @@ export default function CheckoutSuccess() {
       setAlreadyProcessed(false); // Reset processed state
 
       try {
-        // CORRECTED FETCH URL:
-        const response = await fetch(`http://localhost:3001/api/success?session_id=${session_id}`);
+        // CORRECTED FETCH URL using config:
+        const response = await fetch(`${apiUrl}/api/success?session_id=${session_id}`);
         
         // Use response.json() for safer parsing
         const data = await response.json(); 

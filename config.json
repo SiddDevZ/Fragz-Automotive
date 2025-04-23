@@ -1,0 +1,9 @@
+{
+  "local": {
+    "apiBaseUrl": "http://localhost:3001"
+  },
+  "prod": {
+    "apiBaseUrl": "https://fragz-automotive.onrender.com"
+  },
+  "environment": "prod"
+}

@@ -2,6 +2,10 @@
 import React, { useState, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 import ReCAPTCHA from "react-google-recaptcha";
+import config from "../../../../config.json";
+
+// Get the API URL from the config file
+const apiUrl = config[config.environment].apiBaseUrl;
 
 const ImageUpload = ({ name, onFileSelect, error }) => {
   const [preview, setPreview] = useState(null);
@@ -219,9 +223,9 @@ export default function ProductForm({ product, categorySlug, productSlug }) {
             data.append(`files[${key}]`, uploadedFiles[key]);
           }
         });
-      }
+      };
       
-      const response = await fetch('http://localhost:3001/api/create-checkout-session', {
+      const response = await fetch(`${apiUrl}/api/create-checkout-session`, {
         method: 'POST',
         body: data,
       });
