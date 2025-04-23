@@ -362,7 +362,7 @@ export default function ProductForm({ product, categorySlug, productSlug }) {
       <div className="my-6 flex flex-col items-center justify-center">
         <ReCAPTCHA
           ref={recaptchaRef}
-          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // Google's reCAPTCHA test key - replace with your real key in production
+          sitekey="6LeWLyIrAAAAAA_s1ojqjweuTgyrt9pGCbbkKSC2" // Google's reCAPTCHA test key - replace with your real key in production
           onChange={(token) => {
             setCaptchaToken(token);
             setCaptchaError(null);
