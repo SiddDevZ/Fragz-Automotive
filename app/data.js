@@ -17,16 +17,6 @@ const categories = [
           'Authentic 1960s pressed steel plates, capturing the essence of vintage motoring. These durable plates feature period-correct fonts and styling, perfect for classic car enthusiasts and collectors.',
         options: [
           {
-            type: 'box selector',
-            name: 'Select Plate Material',
-            options: ['Steel', 'Aluminium', 'Chrome'],
-          },
-          {
-            type: 'inline selector',
-            name: 'Select Font Style',
-            options: ['Classic', 'Bold', 'Elegant'],
-          },
-          {
             type: 'image upload',
             name: 'Upload Vehicle Registration Document',
           },
