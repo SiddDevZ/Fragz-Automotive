@@ -88,7 +88,7 @@ import createCheckoutSession from './routes/create-checkout-session.js'
 
 app.route('/api', createCheckoutSession)
 
-app.get('/', (c) => c.json({ message: "Hello world" }))
+app.get('/', (c) => c.text("Hello World!"))
 
 const port = process.env.PORT || 3001
 const server = serve({ fetch: app.fetch, port })

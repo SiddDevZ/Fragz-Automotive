@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import config from '../../config.json';
@@ -8,7 +8,8 @@ import config from '../../config.json';
 // Get the API URL from the config file
 const apiUrl = config[config.environment].apiBaseUrl;
 
-export default function CheckoutSuccess() {
+// Create a client component that uses useSearchParams
+function SuccessContent() {
   const searchParams = useSearchParams();
   const session_id = searchParams.get('session_id');
   const [orderDetails, setOrderDetails] = useState(null);
@@ -211,5 +212,21 @@ export default function CheckoutSuccess() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Main component with Suspense
+export default function CheckoutSuccess() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center p-8">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-green-500 border-opacity-60 mx-auto mb-4"></div>
+          <p className="text-xl font-medium text-gray-700">Loading...</p>
+        </div>
+      </div>
+    }>
+      <SuccessContent />
+    </Suspense>
   );
 }

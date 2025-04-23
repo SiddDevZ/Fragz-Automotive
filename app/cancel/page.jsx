@@ -1,12 +1,13 @@
 'use client'
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import config from '../../config.json'
 
 // Get the API URL from the config file
 const apiUrl = config[config.environment].apiBaseUrl;
 
-export default function CheckoutCancel() {
+// Client component that uses navigation hooks
+function CancelContent() {
   useEffect(() => {
     console.log('Checkout was canceled by the user')
 
@@ -38,5 +39,21 @@ export default function CheckoutCancel() {
         </Link>
       </div>
     </div>
+  )
+}
+
+// Main component with Suspense
+export default function CheckoutCancel() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center p-8">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-yellow-500 border-opacity-60 mx-auto mb-4"></div>
+          <p className="text-xl font-medium text-gray-700">Loading...</p>
+        </div>
+      </div>
+    }>
+      <CancelContent />
+    </Suspense>
   )
 }
