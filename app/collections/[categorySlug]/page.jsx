@@ -3,7 +3,7 @@ import Navbar from '../../../components/Navbar/Navbar'
 import Footer from '../../../components/Footer/Footer'
 import Image from 'next/image'
 import Link from 'next/link'
-import { categories } from '../../data.js'
+import categories from '../../data.js'
 
 export default async function CategoryPage({ params }) {
   // In server components, params is directly available as a prop
@@ -47,7 +47,7 @@ export default async function CategoryPage({ params }) {
               key={product.slug}
               className="group block overflow-hidden rounded-xl shadow-lg transition-shadow duration-300 hover:shadow-2xl"
             >
-              <div className="relative h-80">
+              <div className="relative h-64">
                 <Image
                   src={product.image}
                   alt={product.name}

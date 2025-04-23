@@ -4,9 +4,8 @@ import Image from 'next/image'
 import Navbar from '../../../../components/Navbar/Navbar.jsx'
 import Footer from '../../../../components/Footer/Footer.jsx'
 import ProductForm from './ProductForm.jsx'
-import { categories } from '../../../data.js'  // Adjust the path as needed
+import categories from '../../../data.js'
 
-// Pre-generate all product routes based on categorySlug and productSlug
 export async function generateStaticParams() {
   const paramsArray = []
   categories.forEach((category) => {
@@ -40,7 +39,7 @@ export default async function ProductPage({ params }) {
           {/* Left Section: Sticky Product Image */}
           <div className="md:w-1/2">
             {/* The parent container now controls the height (e.g., 200px) */}
-            <div className="h-[500px] sticky top-20">
+            <div className="sm:h-[370px] h-[200px] sticky top-20">
               <Image
                 src={product.image}
                 alt={product.name}
@@ -71,7 +70,11 @@ export default async function ProductPage({ params }) {
               </div>
               {/* <button className='rounded-full px-4 py-2'>Add</button> */}
               <div className="border-t border-gray-200 pt-4 sm:pt-6">
-                <ProductForm product={product} />
+                <ProductForm 
+                  product={product}
+                  categorySlug={categorySlug} 
+                  productSlug={productSlug} 
+                 />
               </div>
             </div>
           </div>

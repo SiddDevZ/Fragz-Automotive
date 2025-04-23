@@ -3,42 +3,56 @@ import Navbar from "../components/Navbar/Navbar";
 import Featured from "../components/Featured/Featured";
 import Reviews from "../components/Reviews/Reviews";
 import { useSearchParams } from "next/navigation";
-import { useRef, Suspense, useEffect } from "react";
+import { useRef, Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Footer from "../components/Footer/Footer";
 
-function SearchParamsHandler({ onReviewsScroll }) {
+function SearchParamsHandler({ onReviewsScroll, onContactScroll }) {
   const searchParams = useSearchParams();
-  
+
   useEffect(() => {
-    if (searchParams.get("scroll") === "reviews") {
+    const scrollTarget = searchParams.get("scroll");
+    if (scrollTarget === "reviews") {
       setTimeout(onReviewsScroll, 100);
+    } else if (scrollTarget === "contact") {
+      setTimeout(onContactScroll, 100);
     }
-  }, [searchParams, onReviewsScroll]);
-  
-  return null; // This component doesn't render anything
+  }, [searchParams, onReviewsScroll, onContactScroll]);
+
+  return null;
 }
 
 export default function Home() {
   const router = useRouter();
   const reviewsRef = useRef(null);
+  const contactRef = useRef(null);
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
   const scrollToreviews = () => {
     reviewsRef.current?.scrollIntoView({ behavior: "smooth" });
     window.history.pushState({}, "", "/");
   };
 
+  const scrollToContact = () => {
+    contactRef.current?.scrollIntoView({ behavior: "smooth" });
+    window.history.pushState({}, "", "/");
+  };
+
   const goToCollections = () => {
     router.push("/collections");
-  }
+  };
+
   return (
     <>
       <div className="min-h-screen w-full bg-[#ffffff] relative">
         <Navbar />
 
         <Suspense fallback={null}>
-          <SearchParamsHandler onReviewsScroll={scrollToreviews} />
+          <SearchParamsHandler
+            onReviewsScroll={scrollToreviews}
+            onContactScroll={scrollToContact}
+          />
         </Suspense>
 
         {/* Hero Section */}
@@ -62,13 +76,13 @@ export default function Home() {
               {/* Trustpilot Badge */}
 
               {/* Main Heading */}
-              <h1 className="text-[1.7rem] leading-9 xs:text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold font-inter text-white tracking-tight">
+              <h1 className="text-[1.9rem] leading-9 xs:text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-bold font-inter text-white tracking-tight">
                 Premium Number Plates <br />
                 <span className="text-amber-400"> Crafted to Perfection</span>
               </h1>
 
               {/* Subtext */}
-              <p className="text-[0.85rem] leading-6 mt-2.5 sm:mt-4 mb-6 sm:text-xl text-white/90 max-w-2xl mx-auto ">
+              <p className="text-[0.85rem] sm:leading-6 mt-2.5 sm:mt-4 mb-6 sm:text-xl text-white/90 max-w-2xl mx-auto ">
                 Elevate your vehicle's identity with our bespoke number plates.
                 Durable materials, legal compliance, and instant
                 personalization.
@@ -82,12 +96,6 @@ export default function Home() {
                 >
                   Design Your Plate
                 </button>
-                {/* <button
-                  // onClick={scrollToProjects}
-                  className="px-[4.5vw] py-[1.9vw] xss:py-[0.65rem] xss:px-[1.18rem] xs:px-[4.2vw] xs:py-[1.5vw] sm:px-[2rem] sm:py-[0.6rem] md:px-[2.5rem] md:py-[0.7rem] lg:px-[2.15rem] lg:py-[0.6rem] border border-black dark:border-white text-black dark:text-white text-[3.5vw] xs:text-[3vw] sm:text-[1rem] md:text-[1.2rem] font-pop hover:scale-[1.03] font-medium rounded-full backdrop-filter backdrop-blur-sm transition-all hover:bg-black hover:bg-opacity-[0.03]"
-                >
-                  View Projects
-                </button> */}
               </div>
 
               <div className="flex items-center cursor-pointer mt-10 justify-center space-x-5 hover:scale-[1.03] transition-transform ease-in duration-300">
@@ -128,8 +136,6 @@ export default function Home() {
             </div>
             <h2 className="font-inter tracking-wide text-4xl sm:text-5xl text-black mb-4 leading-tight">
               Excellence in Number Plate Crafting
-              {/* <br />
-              Tailored to Perfection */}
             </h2>
             <p className="text-base sm:text-lg font-inter text-gray-700 mb-6">
               At Fragz Automotive, we specialize in creating bespoke number
@@ -155,20 +161,19 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <button onClick={() => goToCollections()} className="bg-[#000000] mt-8 text-white font-bold py-3 px-6 rounded-full hover:bg-[#37321f] hover:shadow-lg hover:scale-105 transition ease-out duration-300">
+            <button
+              onClick={() => goToCollections()}
+              className="bg-[#000000] mt-8 text-white font-bold py-3 px-6 rounded-full hover:bg-[#37321f] hover:shadow-lg hover:scale-105 transition ease-out duration-300"
+            >
               DISCOVER OUR RANGE
               <i className="ri-arrow-right-line ml-2"></i>
             </button>
           </div>
         </section>
 
-        <Featured />
+        {/* <Featured /> */}
 
-        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-[#fcfcfc] relative overflow-hidden">
-          {/* Decorative elements */}
-          {/* <div className="absolute top-0 left-0 w-1/3 h-full bg-gradient-to-r from-blue-100/20 to-transparent -translate-x-1/2 -rotate-45" /> */}
-          {/* <div className="absolute bottom-0 right-0 w-1/3 h-full bg-gradient-to-l from-blue-100/20 to-transparent translate-x-1/2 rotate-45" /> */}
-
+        <section className="py-32 px-4 sm:px-6 lg:px-8 bg-[#fcfcfc] relative overflow-hidden">
           <div className="max-w-7xl mx-auto relative z-10">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -240,16 +245,13 @@ export default function Home() {
                     <span className="text-sm font-semibold text-gray-500">
                       {feature.stats}
                     </span>
-                    {/* <div className="w-8 h-px bg-gray-300" /> */}
                   </div>
 
-                  {/* Hover border effect */}
                   <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-[#f6a40030] transition-all duration-300 pointer-events-none" />
                 </div>
               ))}
             </div>
 
-            {/* Stats ribbon */}
             <div className="mt-16 border border-[#f6a400d5] rounded-2xl p-8 shadow-2xl">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 {[
@@ -301,7 +303,10 @@ export default function Home() {
               </h2>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <button onClick={() => goToCollections()} className="bg-amber-500 hover:bg-[#ffa50a] text-white px-6 py-3.5 rounded-full font-bold transition-all transform hover:scale-[1.025] ease-in-out shadow-md">
+                <button
+                  onClick={() => goToCollections()}
+                  className="bg-amber-500 hover:bg-[#ffa50a] text-white px-6 py-3.5 rounded-full font-bold transition-all transform hover:scale-[1.025] ease-in-out shadow-md"
+                >
                   Design Your Plate Now
                   <i className="ri-arrow-right-line ml-2 animate-pulse" />
                 </button>
@@ -309,7 +314,6 @@ export default function Home() {
                 <p className="text-gray-600 sm:ml-4 mt-2 sm:mt-0">
                   or browse our
                   <a
-                    // href="#gallery"
                     onClick={() => goToCollections()}
                     className="text-amber-600 cursor-pointer hover:text-amber-700 font-semibold ml-2"
                   >
@@ -344,24 +348,172 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Contact Section */}
+        <section
+          id="contact"
+          ref={contactRef}
+          className="py-20 px-4 sm:px-6 lg:px-8"
+        >
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+            {/* Contact Form */}
+            <div className="bg-white border border-gray-200 rounded-xl shadow-xl p-8 md:p-10">
+              <h2 className="text-3xl font-bold text-[#090909] mb-8">
+                Send Us a Message
+              </h2>
+              <form className="space-y-6">
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="block text-lg font-medium text-gray-700 mb-1.5"
+                  >
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="John Doe"
+                    required
+                    className="block w-full px-4 py-2.5 border border-gray-300 rounded-md focus:ring-amber-500 focus:border-amber-500 transition duration-150 ease-in-out"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-lg font-medium text-gray-700 mb-1.5"
+                  >
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="john@example.com"
+                    required
+                    className="block w-full px-4 py-2.5 border border-gray-300 rounded-md focus:ring-amber-500 focus:border-amber-500 transition duration-150 ease-in-out"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="subject"
+                    className="block text-lg font-medium text-gray-700 mb-1.5"
+                  >
+                    Subject
+                  </label>
+                  <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    placeholder="How can we help you?"
+                    required
+                    className="block w-full px-4 py-2.5 border border-gray-300 rounded-md focus:ring-amber-500 focus:border-amber-500 transition duration-150 ease-in-out"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="message"
+                    className="block text-lg font-medium text-gray-700 mb-1.5"
+                  >
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows="5"
+                    placeholder="Type your message here..."
+                    required
+                    className="block w-full px-4 py-2.5 border border-gray-300 rounded-md focus:ring-amber-500 focus:border-amber-500 transition duration-150 ease-in-out"
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-4 bg-amber-500 text-white font-semibold rounded-md hover:bg-amber-600 transition duration-300 ease-in-out transform hover:scale-[1.02]"
+                >
+                  Send Message
+                </button>
+              </form>
+            </div>
+
+            {/* Contact Details & Map */}
+            <div className="flex flex-col gap-10">
+              {/* Contact Information */}
+              <div className="bg-white px-8 py-6 md:px-10 md:py-7 rounded-xl shadow-lg border border-gray-100">
+                <h2 className="text-3xl font-bold text-[#090909] mb-4">
+                  Contact Information
+                </h2>
+                <div className="space-y-5">
+                  <div className="flex items-center space-x-4">
+                    <i className="ri-phone-line text-2xl text-amber-500"></i>
+                    <p className="sm:text-xl text-gray-700">+44 123 456 7890</p>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <i className="ri-mail-line text-2xl text-amber-500"></i>
+                    <p className="sm:text-xl text-gray-700">
+                      support@fragzauto.com
+                    </p>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <i className="ri-map-pin-line text-2xl text-amber-500"></i>
+                    <p className="sm:text-xl text-gray-700">
+                      123 Automotive Ave, London, UK
+                    </p>
+                  </div>
+                </div>
+                <div className="flex space-x-4 mt-7">
+                  <a
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                    className="text-gray-500 hover:text-amber-500 transition duration-200"
+                  >
+                    <i className="ri-facebook-circle-line text-3xl"></i>
+                  </a>
+                  <a
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Twitter"
+                    className="text-gray-500 hover:text-amber-500 transition duration-200"
+                  >
+                    <i className="ri-twitter-line text-3xl"></i>
+                  </a>
+                  <a
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="text-gray-500 hover:text-amber-500 transition duration-200"
+                  >
+                    <i className="ri-instagram-line text-3xl"></i>
+                  </a>
+                </div>
+              </div>
+
+              {/* Map Section */}
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
+                <div
+                  className="relative"
+                  style={{ paddingBottom: "56.25%", height: 0 }}
+                >
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2483.318031888901!2d-0.1277583842300961!3d51.50735097963511!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604ce39487f3b%3A0x40a8a04a3a2e1f0!2sLondon%2C%20UK!5e0!3m2!1sen!2suk!4v1679800000000!5m2!1sen!2suk"
+                    frameBorder="0"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="absolute top-0 left-0 w-full h-full"
+                    title="Our Location Map"
+                  ></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <Footer />
       </div>
-
-      <style jsx global>{`
-        @keyframes fade-in-up {
-          0% {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in-up {
-          animation: fade-in-up 0.8s ease-out forwards;
-        }
-      `}</style>
     </>
   );
 }

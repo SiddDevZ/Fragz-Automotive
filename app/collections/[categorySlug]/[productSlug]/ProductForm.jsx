@@ -1,15 +1,56 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useDropzone } from "react-dropzone";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const ImageUpload = ({ name, onFileSelect, error }) => {
   const [preview, setPreview] = useState(null);
+  const [fileError, setFileError] = useState(null);
+  
+  const MAX_FILE_SIZE = 25 * 1024 * 1024;
+  
+  const VALID_IMAGE_TYPES = [
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/gif',
+    'image/bmp',
+    'image/webp',
+    'image/svg+xml',
+    'image/tiff'
+  ];
+  
   const { getRootProps, getInputProps } = useDropzone({
     multiple: false,
-    accept: "image/*",
-    onDrop: (acceptedFiles) => {
+    accept: {
+      'image/*': VALID_IMAGE_TYPES.map(type => `.${type.split('/')[1]}`)
+    },
+    onDrop: (acceptedFiles, fileRejections) => {
+      setFileError(null);
+      
+      if (fileRejections.length > 0) {
+        const rejection = fileRejections[0];
+        if (rejection.errors[0]?.code === 'file-invalid-type') {
+          setFileError("Invalid file type. Please upload an image file.");
+          return;
+        }
+      }
+      
       const file = acceptedFiles[0];
       if (file) {
+        // Check file size
+        if (file.size > MAX_FILE_SIZE) {
+          setFileError(`File is too large. Maximum size is 25MB.`);
+          return;
+        }
+        
+        // Check file type again to be sure
+        if (!VALID_IMAGE_TYPES.includes(file.type)) {
+          setFileError("Invalid file type. Please upload an image file.");
+          return;
+        }
+        
+        // If validation passes, set preview and pass file up
         setPreview(URL.createObjectURL(file));
         onFileSelect(file);
       }
@@ -21,7 +62,7 @@ const ImageUpload = ({ name, onFileSelect, error }) => {
       <div
         {...getRootProps()}
         className={`mt-1 cursor-pointer flex justify-center px-6 pt-5 pb-6 border-2 ${
-          error ? "border-red-500" : "border-gray-300"
+          error || fileError ? "border-red-500" : "border-gray-300"
         } border-dashed rounded-lg hover:border-amber-500 transition-colors duration-300`}
       >
         <input {...getInputProps()} name={name} />
@@ -43,18 +84,25 @@ const ImageUpload = ({ name, onFileSelect, error }) => {
               />
             </svg>
             <p className="text-sm text-gray-600">Drag and drop or click to upload</p>
-            <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+            <p className="text-xs text-gray-500">PNG, JPG, GIF up to 25MB</p>
           </div>
         )}
       </div>
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {(error || fileError) && <p className="text-red-500 text-sm mt-1">{error || fileError}</p>}
     </div>
   );
 };
 
-export default function ProductForm({ product }) {
+export default function ProductForm({ product, categorySlug, productSlug }) {
   const [regNo, setRegNo] = useState("");
+  const [regNoError, setRegNoError] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isCartLoading, setIsCartLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [captchaToken, setCaptchaToken] = useState(null);
+  const [captchaError, setCaptchaError] = useState(null);
+  const recaptchaRef = useRef(null);
   const [selectedOptions, setSelectedOptions] = useState(
     product.options.reduce((acc, option) => {
       if (option.type === "box selector" || option.type === "inline selector") {
@@ -76,11 +124,36 @@ export default function ProductForm({ product }) {
     setErrors((prev) => ({ ...prev, [optionName]: null }));
   };
 
+  const handleRegNoChange = (e) => {
+    const value = e.target.value.toUpperCase();
+    setRegNo(value);
+    
+    // Validate the registration number
+    if (value.length > 0 && value.length < 4) {
+      setRegNoError("Registration number must be at least 4 characters");
+    } else if (value.length > 10) {
+      setRegNoError("Registration number cannot exceed 10 characters");
+    } else {
+      setRegNoError("");
+    }
+  };
+
   const validateForm = () => {
     let isValid = true;
     const newErrors = {};
 
-    // Check for required image uploads
+    // Validate registration number
+    if (regNo.length < 4) {
+      setRegNoError("Registration number must be at least 4 characters");
+      isValid = false;
+    } else if (regNo.length > 10) {
+      setRegNoError("Registration number cannot exceed 10 characters");
+      isValid = false;
+    } else {
+      setRegNoError("");
+    }
+
+    // Validate file uploads
     product.options.forEach((option) => {
       if (option.type === "image upload" && !uploadedFiles[option.name]) {
         newErrors[option.name] = "This image is required.";
@@ -88,30 +161,100 @@ export default function ProductForm({ product }) {
       }
     });
 
-    // Set errors if any
+    // Validate reCAPTCHA
+    if (!captchaToken) {
+      setCaptchaError("Please complete the CAPTCHA verification");
+      isValid = false;
+    } else {
+      setCaptchaError(null);
+    }
+
     setErrors(newErrors);
     return isValid;
   };
 
-  const handleAddToCart = (e) => {
+  const handlePurchase = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
-      return; // Prevent submission if validation fails
+      return;
     }
+  
+    try {
+      setIsLoading(true);
+      const data = new FormData();
+      const productId = product.id || productSlug;
 
-    const formData = {
-      product: product.name,
-      regNo,
-      quantity,
-      options: selectedOptions,
-      files: uploadedFiles,
-    };
-    console.log("Form Data:", formData);
-    alert(`Added ${product.name} to cart with options: ${JSON.stringify(selectedOptions)} with quantity ${quantity}`);
+      data.append('productName', product.name);
+      data.append('productId', productId);
+      data.append('price', product.price);
+      data.append('quantity', quantity.toString());
+      data.append('regNo', regNo);
+      data.append('captchaToken', captchaToken); // Add the captcha token to the form data
+
+      data.append('categorySlug', categorySlug);
+      data.append('productSlug', productSlug);
+
+      const singleItemCart = [{
+        id: `${productId}-${Date.now()}`,
+        productId: productId,
+        productName: product.name,
+        price: product.price,
+        quantity: quantity,
+        regNo: regNo,
+        categorySlug: categorySlug,
+        productSlug: productSlug,
+        selectedOptions: { ...selectedOptions },
+      }];
+
+      data.append('cartItems', JSON.stringify(singleItemCart));
+
+      Object.keys(selectedOptions).forEach(key => {
+        data.append(`options[${key}]`, selectedOptions[key]);
+      });
+      
+      // Ensure file objects are properly appended for direct purchases
+      if (Object.keys(uploadedFiles).length > 0) {
+        Object.keys(uploadedFiles).forEach(key => {
+          if (uploadedFiles[key] instanceof File) {
+            data.append(`files[${key}]`, uploadedFiles[key]);
+          }
+        });
+      }
+      
+      const response = await fetch('http://localhost:3001/api/create-checkout-session', {
+        method: 'POST',
+        body: data,
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Server response:', errorText);
+        throw new Error(`Server error: ${response.status}`);
+      }
+      
+      const session = await response.json();
+
+      if (!session.url) {
+        setError('There was a problem processing the payment.');
+        return;
+      }
+      window.location.href = session.url;
+      
+    } catch (error) {
+      console.error('Error creating checkout session:', error);
+      setError('There was a problem processing your payment. Please try again.');
+    } finally {
+      setIsLoading(false);
+      // Reset captcha after form submission (whether success or failure)
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset();
+      }
+      setCaptchaToken(null);
+    }
   };
 
   return (
-    <form onSubmit={handleAddToCart} className="space-y-4">
+    <form onSubmit={handlePurchase} className="space-y-4">
       <div>
         <div className="flex items-center space-x-4 mb-4">
           <span className="text-gray-700 font-medium">Quantity:</span>
@@ -141,13 +284,14 @@ export default function ProductForm({ product }) {
           <input
             type="text"
             value={regNo}
-            onChange={(e) => setRegNo(e.target.value.toUpperCase())}
+            onChange={handleRegNoChange}
             placeholder="YOUR REG"
             className="w-full h-full bg-transparent text-center sm:text-4xl text-2xl md:text-4xl font-bold text-black placeholder-black/50 outline-none uppercase"
             required
             maxLength="10"
           />
         </div>
+        {regNoError && <p className="text-red-500 text-sm mt-1">{regNoError}</p>}
       </div>
 
       <div className="mb-10">
@@ -205,17 +349,45 @@ export default function ProductForm({ product }) {
         ))}
       </div>
 
+      {error && (
+        <div className="text-red-700 mb-3 mt-4">
+          {error}
+        </div>
+      )}
+
+      <div className="my-6 flex flex-col items-center justify-center">
+        <ReCAPTCHA
+          ref={recaptchaRef}
+          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // Google's reCAPTCHA test key - replace with your real key in production
+          onChange={(token) => {
+            setCaptchaToken(token);
+            setCaptchaError(null);
+          }}
+          onExpired={() => {
+            setCaptchaToken(null);
+            setCaptchaError("CAPTCHA expired, please verify again");
+          }}
+          onErrored={() => {
+            setCaptchaToken(null);
+            setCaptchaError("CAPTCHA error, please try again");
+          }}
+        />
+        {captchaError && (
+          <p className="text-red-500 text-sm mt-2">{captchaError}</p>
+        )}
+        <p className="text-xs text-gray-500 mt-2">
+          This helps us prevent spam and automated submissions
+        </p>
+      </div>
+
       <button
         type="submit"
-        className="w-full py-[0.8rem] bg-[#fdfdfd] border-[2px] hover:shadow-md border-[#959595] tracking-wide text-[#262626] font-bold text-lg rounded-full hover:bg-[#fdfdfd] transition-all duration-300 transform hover:scale-[1.025]"
+        disabled={isLoading}
+        className={`w-full py-[0.8rem] bg-[#fbbf28fc] border-[2px] ${
+          isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:shadow-md hover:scale-[1.025]'
+        } border-[#959595] tracking-wide text-[#262626] font-bold text-lg rounded-full hover:bg-[#fbbf28] transition-all duration-300 transform`}
       >
-        Add to Cart
-      </button>
-      <button
-        type="submit"
-        className="w-full py-[0.8rem] bg-[#fbbf28fc] border-[2px] hover:shadow-md border-[#959595] tracking-wide text-[#262626] font-bold text-lg rounded-full hover:bg-[#fbbf28] transition-all duration-300 transform hover:scale-[1.025]"
-      >
-        Buy Now
+        {isLoading ? 'Processing...' : 'Buy Now'}
       </button>
       
       <div className="mt-6 p-4 bg-[#f0fdf49f] border border-green-200 rounded-lg">

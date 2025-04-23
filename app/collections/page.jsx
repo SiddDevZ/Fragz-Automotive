@@ -5,7 +5,7 @@ import Navbar from '../../components/Navbar/Navbar.jsx'
 import Footer from '../../components/Footer/Footer.jsx'
 import Link from 'next/link.js'
 import Image from 'next/image'
-import { categories } from '../data.js' 
+import categories from '../data.js' 
 
 const CollectionsPage = () => {
   // const router = useRouter()
